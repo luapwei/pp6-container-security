@@ -38,7 +38,7 @@ jobs:
         env:
           TRIVY_DISABLE_VEX_NOTICE: true
 
-      - name: Run Trivy vulnerability scanner (Table for humans)
+      - name: Run Trivy vulnerability scanner (Table)
         uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: pp6-baseline:${{ github.sha }}
