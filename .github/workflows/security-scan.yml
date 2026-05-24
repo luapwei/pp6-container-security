@@ -1,0 +1,66 @@
+name: Security Scan (Trivy)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  scan:
+    name: Build and Scan Container Image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build image
+        run: |
+          docker build \
+            -f docker/Dockerfile \
+            -t pp6-baseline:${{ github.sha }} \
+            .
+
+      - name: Run Trivy vulnerability scanner (JSON)
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: pp6-baseline:${{ github.sha }}
+          format: json
+          output: trivy-report.json
+          severity: CRITICAL,HIGH,MEDIUM,LOW
+          ignore-unfixed: false
+          exit-code: 0       # noch kein Fail-Gate — erst nach Baseline-Implementation
+        env:
+          TRIVY_DISABLE_VEX_NOTICE: true
+
+      - name: Run Trivy vulnerability scanner (Table for humans)
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: pp6-baseline:${{ github.sha }}
+          format: table
+          output: trivy-report.txt
+          severity: CRITICAL,HIGH,MEDIUM,LOW
+          exit-code: 0
+
+      - name: Show summary in workflow log
+        run: |
+          echo "=== Image Info ==="
+          docker images pp6-baseline:${{ github.sha }} --format "Size: {{.Size}}"
+          docker inspect pp6-baseline:${{ github.sha }} --format 'Digest: {{.Id}}'
+          echo ""
+          echo "=== Trivy Severity Counts ==="
+          jq -r '.Results[].Vulnerabilities[]?.Severity' trivy-report.json | sort | uniq -c
+
+      - name: Upload Trivy reports as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-report-${{ github.sha }}
+          path: |
+            trivy-report.json
+            trivy-report.txt
+          retention-days: 90
