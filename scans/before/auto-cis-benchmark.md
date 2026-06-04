@@ -25,6 +25,19 @@
 | **5.23** exec --privileged nicht verwendet | **PASS**    | Während gesamter Vorher-Messung kein `docker exec --privileged` ausgeführt; Pannenbuch dokumentiert.                                                                                                                                                                           |
 | **5.24** exec --user=root nicht verwendet  | **FAIL**    | Container läuft als root (siehe 4.1). Jeder `docker exec` ohne explizites `--user` läuft daher implizit als root. Strukturell FAIL solange 4.1 FAIL.                                                                                                                           |
 
+|Bucket|Anzahl|
+|---|---|
+|PASS (automatisiert)|18|
+|PASS (manuell)|2|
+|**Σ PASS**|**20**|
+|WARN (automatisiert)|13|
+|FAIL (manuell)|5|
+|PARTIAL (als FAIL gewertet)|2|
+|**Σ nicht-PASS**|**20**|
+|INFO (ausgeschlossen)|4|
+
+**Conformity-Score Vorher: 20 / 40 = 50,0 %**
+
 ```bash
 # --------------------------------------------------------------------------------------------
 # Docker Bench for Security v1.6.0
