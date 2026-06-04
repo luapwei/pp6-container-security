@@ -10,6 +10,21 @@
 - Output gesichert in: scans/before/docker-bench-vorher.txt
 - Manuelle v1.8-Bewertung der NOTE-Controls: ausstehend
 
+# Scope = 4 & 5 
+## Deshalb müssen 9 "NOTES" manuell geprüft werden
+
+| ID                                         | Verdict     | Evidenz                                                                                                                                                                                                                                                                        |
+| ------------------------------------------ | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **4.2** Trusted base images                | **PARTIAL** | Docker Official Image (vertrauenswürdige Quelle), aber `python:3.7-slim-buster` ist mehrfach EOL: Python 3.7 EOL Juni 2023, Debian Buster EOL Juni 2024. Vertrauenswürdige Herkunft, end-of-life Inhalt.                                                                       |
+| **4.3** Unnecessary packages               | **PARTIAL** | 92 installierte Pakete (`dpkg -l`). slim-buster ist gegenüber dem Standard-Image reduziert (build-deps werden im Base-Build mit `apt-mark auto + apt-get purge --auto-remove` entfernt), aber nicht minimal. Distroless / wolfi-base hätte deutlich weniger.                   |
+| **4.4** Scanned & rebuilt for patches      | **FAIL**    | Vor diesem Projekt existierte kein Scan- oder Rebuild-Prozess. Wird in Phase 3 durch CI-Trivy-Pipeline und Base-Image-Wechsel adressiert.                                                                                                                                      |
+| **4.8** setuid/setgid removed              | **FAIL**    | 12 SUID/SGID-Binaries vorhanden: `passwd, chage, chsh, chfn, gpasswd, expiry, newgrp, wall, unix_chkpwd, su, mount, umount`. Keines davon wird für die Flask-App benötigt.                                                                                                     |
+| **4.10** Secrets in Dockerfile             | **PASS**    | Dockerfile enthält keine Secrets (kein ENV/ARG mit Credentials). `docker history --no-trunc` zeigt nur Public-Daten (SHA256-Checksums, Public GPG-Key-IDs).                                                                                                                    |
+| **4.11** Only verified packages            | **FAIL**    | `pip install -r requirements.txt` ohne `--require-hashes` und ohne PEP-503/`--index-url`-Pinning. requirements.txt (Werkzeug 2.0.3, Flask) ohne Hash-Pins. Base-Image verifiziert Python-Source via GPG, aber das ist Eigenschaft des Base-Image, nicht des PP-VI-Dockerfiles. |
+| **4.12** Signed artifacts validated        | **FAIL**    | Kein Cosign, kein Notary v2, kein Image-Signing aktiv. Image-Pull ohne Signaturprüfung.                                                                                                                                                                                        |
+| **5.23** exec --privileged nicht verwendet | **PASS**    | Während gesamter Vorher-Messung kein `docker exec --privileged` ausgeführt; Pannenbuch dokumentiert.                                                                                                                                                                           |
+| **5.24** exec --user=root nicht verwendet  | **FAIL**    | Container läuft als root (siehe 4.1). Jeder `docker exec` ohne explizites `--user` läuft daher implizit als root. Strukturell FAIL solange 4.1 FAIL.                                                                                                                           |
+
 ```bash
 # --------------------------------------------------------------------------------------------
 # Docker Bench for Security v1.6.0
