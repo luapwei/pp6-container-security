@@ -1,0 +1,21 @@
+services:
+  pp6-app:
+    image: pp6-baseline:hardened
+    container_name: pp6-hardened
+    build:
+      context: ..                      # Build-Context = Projekt-Root
+      dockerfile: docker/Dockerfile
+    ports:
+      - "127.0.0.1:5000:5000"          # 5.14 — nur Loopback statt 0.0.0.0
+    read_only: true                    # 5.13 — Root-FS read-only
+    tmpfs:
+      - /tmp                           # Flask/Python brauchen schreibbares /tmp
+    mem_limit: 256m                    # 5.11
+    cpus: 0.5                          # 5.12
+    pids_limit: 100                    # 5.29
+    security_opt:
+      - no-new-privileges:true         # 5.26
+      - apparmor=docker-default        # 5.2
+    cap_drop:
+      - ALL                            # extra: alle Linux-Capabilities weg
+    restart: on-failure:5              # 5.15 (war schon PASS, schadet nicht)
