@@ -6,7 +6,7 @@ FROM cgr.dev/chainguard/python:latest-dev AS builder
 WORKDIR /app
 
 # requirements.txt (mit Hashes) reinkopieren
-COPY requirements.txt .
+COPY app/requirements.txt .
 
 # pip install mit Hash-Verifikation in ein eigenes Verzeichnis
 # --target=/install → Pakete liegen isoliert, lassen sich easy kopieren
