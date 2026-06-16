@@ -6,7 +6,7 @@ services:
       context: ..                      # Build-Context = Projekt-Root
       dockerfile: docker/Dockerfile
     ports:
-      - "127.0.0.1:5000:5000"          # 5.14 — nur Loopback statt 0.0.0.0
+      - "192.168.178.25:5000:5000"          # 5.14 — IP statt 0.0.0.0
     read_only: true                    # 5.13 — Root-FS read-only
     tmpfs:
       - /tmp                           # Flask/Python brauchen schreibbares /tmp
