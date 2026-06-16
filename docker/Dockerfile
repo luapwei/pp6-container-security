@@ -3,6 +3,7 @@
 # ============================================================
 FROM cgr.dev/chainguard/python:latest-dev AS builder
 
+USER root
 WORKDIR /app
 
 # requirements.txt (mit Hashes) reinkopieren
