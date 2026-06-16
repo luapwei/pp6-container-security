@@ -13,6 +13,7 @@
 * aquasecurity/trivy-action@v0.36.0
 * Ohne Failgate > Kommt erst nach Security Baseline
 * Gespeichert als JSON und txt File
+* Scan von Before wurde am Tag des After Scans wiederholt um zu prüfen ob sich was an der CVE DB geändert hat > Keine Änderung nur +3 Unknown
 
 
 ## Python
