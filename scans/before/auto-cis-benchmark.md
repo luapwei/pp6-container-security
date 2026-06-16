@@ -5,10 +5,9 @@
 - Image: pp6-baseline:naive (Commit cda587dc)
 - Scope: Section 4 + 5 (44 Controls), übrige Sektionen out of scope
 - Ergebnis automatisiert: 18 PASS / 13 WARN / 9 NOTE / 4 INFO
-- Conformity-Quote (PASS/(PASS+WARN)): 58,1 %
 - Erst-Run mit `sh` produzierte Section-2-Skips; Re-Run mit `bash` behoben
 - Output gesichert in: scans/before/docker-bench-vorher.txt
-- Manuelle v1.8-Bewertung der NOTE-Controls: ausstehend
+- Manuelle v1.8-Bewertung der NOTE-Controls
 
 # Scope = 4 & 5 
 ## Deshalb müssen 9 "NOTES" manuell geprüft werden
