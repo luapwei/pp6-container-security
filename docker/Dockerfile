@@ -1,7 +1,7 @@
 # ============================================================
 # Stage 1: BUILDER — installiert Python-Deps mit Hash-Check
 # ============================================================
-FROM cgr.dev/chainguard/python:latest-dev AS builder
+FROM cgr.dev/chainguard/python:latest-dev@sha256:a62f72f9480c548cd3d7d07426a490aab2a38c4fa89b9665dc36780ed85aca9f AS builder
 
 USER root
 WORKDIR /app
@@ -20,7 +20,7 @@ RUN pip install \
 # ============================================================
 # Stage 2: RUNTIME — minimal, nonroot (uid 65532), keine shell, kein pip
 # ============================================================
-FROM cgr.dev/chainguard/python:latest
+FROM cgr.dev/chainguard/python:latest@sha256:7036bf1b4a132cccad9f68ea9b9945642df49ea7f940194fbcb0429db8da0e48
 
 WORKDIR /app
 
