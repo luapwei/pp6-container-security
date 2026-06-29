@@ -6,7 +6,7 @@ services:
       context: ..                      # Build-Context ist root
       dockerfile: docker/Dockerfile
     ports:
-      - "192.168.178.25:5000:5000"     # 5.14 — IP statt 0.0.0.0
+      - "127.0.0.1:5000:5000"          # 5.14 — IP statt 0.0.0.0
     read_only: true                    # 5.13
     tmpfs:
       - /tmp                           # Flask benötigt schreibbares /tmp
@@ -19,3 +19,4 @@ services:
     cap_drop:
       - ALL                            # alle Linux-Capabilities weg
     restart: on-failure:5              # 5.15
+
