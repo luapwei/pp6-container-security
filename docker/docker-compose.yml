@@ -3,13 +3,13 @@ services:
     image: pp6-baseline:hardened
     container_name: pp6-hardened
     build:
-      context: ..                      # Build-Context = Projekt-Root
+      context: ..                      # Build-Context ist root
       dockerfile: docker/Dockerfile
     ports:
       - "192.168.178.25:5000:5000"     # 5.14 — IP statt 0.0.0.0
-    read_only: true                    # 5.13 — Root-FS read-only
+    read_only: true                    # 5.13
     tmpfs:
-      - /tmp                           # benötigt schreibbares /tmp
+      - /tmp                           # Flask benötigt schreibbares /tmp
     mem_limit: 256m                    # 5.11
     cpus: 0.5                          # 5.12
     pids_limit: 100                    # 5.29
