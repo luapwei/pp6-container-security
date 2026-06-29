@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    - cron: '0 3 * * 1'      # ← jeden Montag 03:00 UTC
+    - cron: '0 3 * * 1'      # jeden Montag 03:00 Uhr
   workflow_dispatch:
 
 jobs:
@@ -27,18 +27,6 @@ jobs:
             -f docker/Dockerfile \
             -t pp6-baseline:${{ github.sha }} \
             .
-
-      - name: Run Trivy vulnerability scanner (JSON)
-        uses: aquasecurity/trivy-action@v0.36.0
-        with:
-          image-ref: pp6-baseline:${{ github.sha }}
-          format: json
-          output: trivy-report.json
-          severity: CRITICAL,HIGH,MEDIUM,LOW
-          ignore-unfixed: false
-          exit-code: 0       # noch kein Fail-Gate — erst nach Baseline-Implementation
-        env:
-          TRIVY_DISABLE_VEX_NOTICE: true
 
       - name: Run Trivy vulnerability scanner (Table)
         uses: aquasecurity/trivy-action@v0.36.0
